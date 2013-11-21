@@ -7,26 +7,31 @@ import re
 import subprocess
 from sys import argv
 import hashlib
+from collections import namedtuple
 
 def main():
     command = subprocess.Popen(["git", "annex", "list"] + argv[1:],
                                stdout = subprocess.PIPE)
     colorizer = string_colorizer.string_colorizer(hashfunc=hashlib.md5,
                                                   colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
-    colors = []
+    RemoteInfo = namedtuple("RemoteInfo", ["color", "name"])
+    remotes = []
     for line in command.stdout:
         line = line.decode().rstrip('\n')
-        colors.append(colorizer.choose_color(re.search(r'^\|*(.*)', line).group(1)))
-        line = re.sub(r'^(\|*)([^|].*)', lambda m: m.group(1) + colors[-1] + m.group(2) + colorizer.reset, line)
+        match = re.match(r'^(\|*)([^|].*)', line)
+        if match:
+            remotes.append(RemoteInfo(colorizer.choose_color(match.group(2)),
+                                      match.group(2)))
+            line = match.group(1) + remotes[-1].color + match.group(2) + colorizer.reset
         print(line)
-        if re.search(r'^\|+$', line):
+        if not match:
             break
 
     for line in command.stdout:
         line = list(line.decode().rstrip('\n'))
-        for i in range(0, len(colors)):
+        for i in range(0, len(remotes)):
             if line[i] == "X":
-                line[i] = colors[i] + line[i] + colorizer.reset
+                line[i] = remotes[i].color + remotes[i].name[0] + colorizer.reset
         print("".join(line))
 
 if __name__ == "__main__":
