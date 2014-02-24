@@ -7,14 +7,11 @@ import string_colorizer
 import re
 import subprocess
 from sys import argv
-from os import chdir as cd
 import hashlib
 from collections import namedtuple
 
 def main():
-    if len(argv) > 1:
-        cd(argv[1])
-    command = subprocess.Popen(["git", "annex", "list"],
+    command = subprocess.Popen(["git", "annex", "list"] + argv[1:],
                                stdout = subprocess.PIPE)
     colorizer = string_colorizer.string_colorizer(hashfunc=hashlib.md5,
                                                   colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])

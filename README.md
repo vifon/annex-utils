@@ -3,9 +3,6 @@ annex-color
 
 Drop-in colorizers for Git Annex.
 
-`annex-list` optionally accepts a working directory in an argument,
-while the vanilla `git annex list` does not.
-
 AUTHOR
 ------
 
