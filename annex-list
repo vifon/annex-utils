@@ -35,7 +35,11 @@ def main():
             if colored_repos[i] == "X":
                 colored_repos[i] = remotes[i].color + remotes[i].name[0] + colorizer.reset
         colored_repos = "".join(colored_repos)
-        return colored_repos + " " + colorizer.colorize_path(os.path.dirname(match.group(2))) + os.path.sep + os.path.basename(match.group(2))
+        return (colored_repos + " " +
+                (colorizer.colorize_path(os.path.dirname(match.group(2))) + os.path.sep
+                 if os.path.dirname(match.group(2))
+                 else "") +
+                os.path.basename(match.group(2)))
 
     for line in command.stdout:
         print(re.sub(r"(.*?) (.*)", apply_colors, line), end="")

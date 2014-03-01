@@ -19,7 +19,10 @@ def main():
                 colorizer.colorize(match.group(2)))
     def color_copies(match):
         return ("whereis " +
-                colorizer.colorize_path(os.path.dirname(match.group(1))) + os.path.sep + os.path.basename(match.group(1)) +
+                (colorizer.colorize_path(os.path.dirname(match.group(1))) + os.path.sep
+                 if os.path.dirname(match.group(1))
+                 else "") +
+                os.path.basename(match.group(1)) +
                 " " +
                 colorizer.colors[8] + match.group(2) + colorizer.reset)
     for line in command.stdout:
