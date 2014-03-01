@@ -14,8 +14,10 @@ from collections import namedtuple
 def main():
     command = subprocess.Popen(["git", "annex", "list"] + argv[1:],
                                stdout = subprocess.PIPE)
+
+    # these options look nice on my personal annex, YMMV
     colorizer = path_colorizer.path_colorizer(hashfunc=hashlib.md5,
-                                                  colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
+                                              colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
     RemoteInfo = namedtuple("RemoteInfo", ["color", "name"])
     remotes = []
     for line in command.stdout:
