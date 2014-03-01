@@ -3,6 +3,14 @@ annex-color
 
 Drop-in colorizers for Git Annex.
 
+DISCLAIMER
+----------
+
+I'm still trying to figure out how to distribute my path colorizer
+(and Python libraries in general) which these scripts use heavily. For
+now they are just included in this repository. It's ugly but it works,
+or so I think. Please bear with it for a while.
+
 AUTHOR
 ------
 
