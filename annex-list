@@ -3,8 +3,9 @@
 from __future__ import print_function
 
 import sys
-import string_colorizer
+import path_colorizer
 import re
+import os.path
 import subprocess
 from sys import argv
 import hashlib
@@ -13,7 +14,7 @@ from collections import namedtuple
 def main():
     command = subprocess.Popen(["git", "annex", "list"] + argv[1:],
                                stdout = subprocess.PIPE)
-    colorizer = string_colorizer.string_colorizer(hashfunc=hashlib.md5,
+    colorizer = path_colorizer.path_colorizer(hashfunc=hashlib.md5,
                                                   colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
     RemoteInfo = namedtuple("RemoteInfo", ["color", "name"])
     remotes = []
@@ -28,12 +29,16 @@ def main():
         if not match:
             break
 
-    for line in command.stdout:
-        line = list(line.decode().rstrip('\n'))
+    def apply_colors(match):
+        colored_repos = list(match.group(1).decode())
         for i in range(0, len(remotes)):
-            if line[i] == "X":
-                line[i] = remotes[i].color + remotes[i].name[0] + colorizer.reset
-        print("".join(line))
+            if colored_repos[i] == "X":
+                colored_repos[i] = remotes[i].color + remotes[i].name[0] + colorizer.reset
+        colored_repos = "".join(colored_repos)
+        return colored_repos + " " + colorizer.colorize_path(os.path.dirname(match.group(2))) + os.path.sep + os.path.basename(match.group(2))
+
+    for line in command.stdout:
+        print(re.sub(r"(.*?) (.*)", apply_colors, line), end="")
 
 if __name__ == "__main__":
     main()

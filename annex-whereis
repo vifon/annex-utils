@@ -3,25 +3,29 @@
 from __future__ import print_function
 
 import sys
-import string_colorizer
+import path_colorizer
 import re
+import os.path
 import subprocess
 from sys import argv
 
 def main():
     command = subprocess.Popen(["git", "annex", "whereis"] + argv[1:],
                                stdout = subprocess.PIPE)
-    colorizer = string_colorizer.string_colorizer()
+    colorizer = path_colorizer.path_colorizer()
     def color_remotes(match):
-        return (colorizer.colors[0] + match.group(1) + colorizer.reset +
+        return ("\033[90m" + match.group(1) + colorizer.reset +
                 " -- " +
                 colorizer.colorize(match.group(2)))
     def color_copies(match):
-        return colorizer.colors[8] + match.group(1) + colorizer.reset
+        return ("whereis " +
+                colorizer.colorize_path(os.path.dirname(match.group(1))) + os.path.sep + os.path.basename(match.group(1)) +
+                " " +
+                colorizer.colors[8] + match.group(2) + colorizer.reset)
     for line in command.stdout:
         line = line.decode()
         line = re.sub(r"([a-f0-9-]+) -- (.*)", color_remotes, line)
-        line = re.sub(r"(\(\d+ cop(?:y|ies)\))", color_copies, line)
+        line = re.sub(r"^whereis (.*) (\(\d+ cop(?:y|ies)\))", color_copies, line)
         print(line, end="")
 
 if __name__ == "__main__":
