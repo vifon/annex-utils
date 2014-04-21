@@ -32,7 +32,7 @@ def main():
             break
 
     def apply_colors(match):
-        colored_repos = list(match.group(1).decode())
+        colored_repos = list(match.group(1))
         for i in range(0, len(remotes)):
             if colored_repos[i] == "X":
                 colored_repos[i] = remotes[i].color + remotes[i].name[0] + colorizer.reset
@@ -44,7 +44,7 @@ def main():
                 os.path.basename(match.group(2)))
 
     for line in command.stdout:
-        print(re.sub(r"(.*?) (.*)", apply_colors, line), end="")
+        print(re.sub(r"(.*?) (.*)", apply_colors, line.decode()), end="")
 
 if __name__ == "__main__":
     main()
