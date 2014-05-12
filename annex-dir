@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+"""
+lists which directories have at least one file present and which are completely empty
+"""
+
+from __future__ import print_function
+
+import argparse
+import os
+
+def main(root_dir):
+    root_dir_contents = set(os.listdir(root_dir))
+    root_dir_contents.discard(".git")
+    directories = (file for file in root_dir_contents
+                   if os.path.isdir(os.path.join(root_dir, file)))
+
+    existing = set()
+    absent = set()
+
+    for directory in directories:
+        for root, _, files in os.walk(os.path.join(root_dir, directory)):
+            if any(os.path.islink(os.path.join(root, f))
+                   and os.path.exists(os.path.join(root, f))
+                   for f in files):
+                existing.add(directory)
+                break
+        else:
+            absent.add(directory)
+
+    for i in sorted(existing.union(absent)):
+        if i in absent:
+            print("\033[31m" + i + "\033[0m")
+        else:
+            print(i)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("root_dir", default=".", nargs="?")
+    args = parser.parse_args()
+    main(args.root_dir)
