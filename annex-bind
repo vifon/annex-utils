@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Relink the missing content from another locally available annex
+# repository. Use `git checkout -f' afterwards.
+#
+# Usage:
+#   annex-bind {another annex} {files/subtrees to borrow}
+
+
+FLAGS=""
+while getopts "v" ARG; do
+    case "$ARG" in
+        v)
+            FLAGS+=$ARG ;;
+        ?)
+            ;;
+    esac
+done
+shift $[$OPTIND-1]
+if [ -n "$FLAGS" ]; then
+    FLAGS="-$FLAGS"
+fi
+
+
+
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 {another annex} {files/subtrees to borrow}" 1>&2
+    exit 1
+fi
+
+ANNEX_ROOT="$(git rev-parse --show-toplevel)"
+if [ $? != 0 ]; then
+    echo "You must be in an annex" 1>&2
+    exit 3
+fi
+
+ANOTHER="$(realpath -s "$1")"
+if [ ! -d "$ANOTHER/.git/annex" -o "$ANNEX_ROOT" = "$ANOTHER" ]; then
+    echo "The first argument must be an another annex" 1>&2
+    exit 2
+fi
+
+
+
+
+while [ -n "$1" ]; do
+    SUBTREE="$(realpath -s --relative-to="$ANNEX_ROOT" "$1")"
+    cd "$ANNEX_ROOT"
+    find "$SUBTREE" -name ".git*" -prune -o -type l -xtype l -exec ln -sf $FLAGS "$ANOTHER/{}" '{}' \;
+    cd $OLDPWD
+    shift
+done
