@@ -40,6 +40,7 @@ if [ ! -d "$ANOTHER/.git/annex" -o "$ANNEX_ROOT" = "$ANOTHER" ]; then
     echo "The first argument must be an another annex" 1>&2
     exit 2
 fi
+shift
 
 
 
