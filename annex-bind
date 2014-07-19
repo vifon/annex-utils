@@ -51,3 +51,5 @@ while [ -n "$1" ]; do
     cd $OLDPWD
     shift
 done
+
+echo -e "\033[34;1mUse \`git checkout -f' when finished\033[0m"
