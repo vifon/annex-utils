@@ -49,7 +49,7 @@ while [ -n "$1" ]; do
     SUBTREE="$(realpath -s --relative-to="$ANNEX_ROOT" "$1")"
     cd "$ANNEX_ROOT"
     find "$SUBTREE" -name ".git*" -prune -o -type l -xtype l -exec ln -sf $FLAGS "$ANOTHER/{}" '{}' \;
-    cd $OLDPWD
+    cd "$OLDPWD"
     shift
 done
 
