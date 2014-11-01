@@ -5,6 +5,12 @@
 #
 # Usage:
 #   annex-bind {another annex} {files/subtrees to borrow}
+#
+# WARNING: Do NOT perform any annex operations on this repository or
+# the connected ones while the bind is enabled. Especially `drop' etc.
+# You may lose some data as the other repository may think this one
+# has a copy when in reality it's only the same copy it has already
+# counted in the other repo.
 
 
 FLAGS=""
