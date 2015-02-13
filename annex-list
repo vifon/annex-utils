@@ -21,7 +21,7 @@ def main():
     RemoteInfo = namedtuple("RemoteInfo", ["color", "name"])
     remotes = []
     for line in command.stdout:
-        line = line.decode().rstrip('\n')
+        line = line.decode('utf8').rstrip('\n')
         match = re.match(r'^(\|*)([^|].*)', line)
         if match:
             remotes.append(RemoteInfo(colorizer.choose_color(match.group(2)),
@@ -44,7 +44,7 @@ def main():
                 os.path.basename(match.group(2)))
 
     for line in command.stdout:
-        print(re.sub(r"(.*?) (.*)", apply_colors, line.decode()), end="")
+        print(re.sub(r"(.*?) (.*)", apply_colors, line.decode('utf8')), end="")
 
 if __name__ == "__main__":
     main()

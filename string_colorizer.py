@@ -42,7 +42,7 @@ class string_colorizer(object):
         """
         self._reset = reset
         if use_hashlib:
-            self.hashfunc = lambda x: int(hashfunc(x.encode()).hexdigest(),
+            self.hashfunc = lambda x: int(hashfunc(x.encode('utf8')).hexdigest(),
                                           base=16)
         else:
             self.hashfunc = hashfunc
