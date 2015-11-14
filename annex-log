@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import sys
-import path_colorizer
+import string_colorizer
 import re
 import subprocess
 from sys import argv
@@ -11,7 +11,7 @@ from sys import argv
 def main():
     command = subprocess.Popen(["git", "annex", "log"] + argv[1:],
                                stdout = subprocess.PIPE)
-    colorizer = path_colorizer.path_colorizer()
+    colorizer = string_colorizer.PathColorizer()
     def apply_colors(match):
         return (("\033[32m" if match.group(1) == '+' else "\033[31m") +
                 match.group(1) +

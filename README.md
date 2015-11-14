@@ -15,7 +15,6 @@ ANNEX-BIND
 Relink the missing content from another locally available annex
 repository. Use `git checkout -f' afterwards.
 
-
 ANNEX-DIR
 ---------
 
@@ -36,7 +35,7 @@ Wojciech Siewierski < wojciech dot siewierski at gmail dot com >
 COPYRIGHT
 ---------
 
-Copyright (C) 2013-2014  Wojciech Siewierski
+Copyright (C) 2013-2015  Wojciech Siewierski
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

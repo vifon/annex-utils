@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import sys
-import path_colorizer
+import string_colorizer
 import re
 import os.path
 import subprocess
@@ -15,8 +15,8 @@ def main():
                                stdout = subprocess.PIPE)
 
     # these options look nice on my personal annex, YMMV
-    colorizer = path_colorizer.path_colorizer(hashfunc=hashlib.md5,
-                                              colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
+    colorizer = string_colorizer.PathColorizer(hashfunc=hashlib.md5,
+                                               colors=["{};1".format(x) for x in [31, 32, 33, 34, 35, 36]])
     def color_remotes(match):
         return ("\033[90m" + match.group(1) + colorizer.reset +
                 " -- " +
