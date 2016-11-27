@@ -30,7 +30,7 @@ fi
 
 
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
     echo "Usage: $0 {another annex} {files/subtrees to borrow}" 1>&2
     exit 1
 fi
@@ -50,8 +50,7 @@ shift
 
 
 
-
-while [ -n "$1" ]; do
+while [ $# -ne 0 ]; do
     SUBTREE="$(realpath -s --relative-to="$ANNEX_ROOT" "$1")"
     cd "$ANNEX_ROOT"
     find "$SUBTREE" -name ".git*" -prune -o -type l -xtype l -exec ln -sf $FLAGS "$ANOTHER/{}" '{}' \;
